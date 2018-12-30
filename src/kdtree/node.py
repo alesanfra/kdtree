@@ -34,3 +34,15 @@ class Node:
         elif self.super_key(j) < q.super_key(j):
             return self.hison, self.HISON
         raise ValueError("Same node")
+
+    def add_son(self, node, side, dimension):
+        if side is Node.LOSON:
+            self.loson = node
+        else:
+            self.hison = node
+
+        node.disc = self._next_disc(dimension)
+        node.loson = node.hison = None
+
+    def _next_disc(self, dimension):
+        return (self.disc + 1) % dimension

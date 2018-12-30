@@ -33,27 +33,22 @@ class KDTree:
             self.set_root(node)
             return
 
-        q = self._root
-        while q is not None:
-            if q.keys == node.keys:
-                return q
+        parent = None
+        side = None
+        son = self._root
 
-            son, side = q.successor(node)
+        while son is not None:
+            if son.keys == node.keys:
+                return son  # Found the same node, return it
 
-            if son is None:
-                node.disc = self._next_disc(q.disc)
-                node.loson = None
-                node.hison = None
-                if side is Node.LOSON:
-                    q.loson = node
-                else:
-                    q.hison = node
-                self._update_current_bounds(node.keys)
-                return None
-            q = son
+            # Move down
+            parent = son
+            son, side = son.successor(node)
 
-    def _next_disc(self, disc):
-        return (disc + 1) % self.dimension
+        # Found leaf where to insert new node
+        parent.add_son(node, side, self.dimension)
+        self._update_current_bounds(node.keys)
+        return
 
     def region_search(self, rectangle):
         if len(rectangle) != 2 * self.dimension:
