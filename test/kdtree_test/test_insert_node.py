@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from kdtree import KDTree, Node
+from kdtree.node import Node
+from kdtree.tree import KDTree
 
 
 class TestInsertNode(TestCase):
@@ -11,8 +12,8 @@ class TestInsertNode(TestCase):
         r = tree.insert(node)
 
         assert r is None
-        assert tree.root is node
-        assert tree.root.super_key(0) == node.super_key(0)
+        assert tree._root is node
+        assert tree._root.super_key(0) == node.super_key(0)
         assert node.disc == 0
         assert node.loson is None
         assert node.hison is None
@@ -26,8 +27,8 @@ class TestInsertNode(TestCase):
         r = tree.insert(node2)
 
         assert r is None
-        assert tree.root is node1
-        assert tree.root.loson is node2
+        assert tree._root is node1
+        assert tree._root.loson is node2
         assert node2.disc == 1
         assert node2.loson is None
         assert node2.hison is None
