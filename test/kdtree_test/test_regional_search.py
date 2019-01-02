@@ -1,12 +1,12 @@
 from unittest import TestCase
 
 from kdtree.node import Node
-from kdtree.tree import KDTree
+from kdtree.tree import BinSearchTree
 
 
 class TestRegionalSearch(TestCase):
     def setUp(self):
-        self.tree = KDTree(2)
+        self.tree = BinSearchTree(2)
         self.tree.insert(Node(keys=(50, 50)))
         self.tree.insert(Node(keys=(10, 70)))
         self.tree.insert(Node(keys=(80, 85)))

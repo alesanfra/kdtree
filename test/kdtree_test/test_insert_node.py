@@ -1,12 +1,12 @@
 from unittest import TestCase
 
 from kdtree.node import Node
-from kdtree.tree import KDTree
+from kdtree.tree import BinSearchTree
 
 
 class TestInsertNode(TestCase):
     def test_insert_empty(self):
-        tree = KDTree(2)
+        tree = BinSearchTree(2)
         node = Node(keys=(1, 2))
 
         r = tree.insert(node)
@@ -19,7 +19,7 @@ class TestInsertNode(TestCase):
         assert node.hison is None
 
     def test_insert_two_nodes(self):
-        tree = KDTree(2)
+        tree = BinSearchTree(2)
         node1 = Node(keys=(50, 50))
         node2 = Node(keys=(10, 70))
 

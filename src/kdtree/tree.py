@@ -1,11 +1,10 @@
-import copy
-from typing import Optional
+from typing import Optional, List
 
-from kdtree import Bound
 from kdtree.node import Node
+from kdtree.region import Region
 
 
-class KDTree:
+class BinSearchTree:
     def __init__(self, dimension: int):
         if not isinstance(dimension, int) or dimension < 1:
             raise ValueError("Dimension must be a positive integer")
@@ -14,19 +13,12 @@ class KDTree:
         self._root = None
         self._current_bounds = None
 
-    def _update_current_bounds(self, keys):
-        if self._current_bounds is None:
-            self._current_bounds = [Bound(k, k) for k in keys]
-        else:
-            self._current_bounds = [Bound(lower=min(bound.lower, key), upper=max(bound.upper, key))
-                                    for bound, key in zip(self._current_bounds, keys)]
-
     def set_root(self, node: Node):
         self._root = node
         self._root.disc = 0
         self._root.hison = None
         self._root.loson = None
-        self._update_current_bounds(node.keys)
+        self._current_bounds = Region.from_node(node)
 
     def insert(self, node: Node) -> Optional[Node]:
         if self._root is None:
@@ -47,26 +39,25 @@ class KDTree:
 
         # Found leaf where to insert new node
         parent.add_son(node, side, self.dimension)
-        self._update_current_bounds(node.keys)
+        self._current_bounds.resize_to_contain_node(node)
         return
 
-    def region_search(self, rectangle):
+    def region_search(self, rectangle) -> List[Node]:
         if len(rectangle) != 2 * self.dimension:
             raise ValueError("Invalid bound array")
 
-        rectangle = [Bound(rectangle[i], rectangle[i + 1]) for i in range(0, self.dimension * 2, 2)]
-        return self._region_search(self._root, rectangle, self._current_bounds)
+        return self._region_search(self._root, Region.from_bounds_array(rectangle), self._current_bounds)
 
-    def _region_search(self, node: Node, rectangle, bounds):
-        if node is None or not self._bounds_intersect_region(bounds, rectangle):
+    def _region_search(self, node: Node, rectangle: Region, subtree_bounds: Region) -> List[Node]:
+        if node is None or not rectangle.intersects_region(subtree_bounds):
             return []
 
         found = []
-        if self._in_region(node, rectangle):
+        if node in rectangle:
             found.append(node)
 
-        bounds_l = copy.deepcopy(bounds)
-        bounds_h = copy.deepcopy(bounds)
+        bounds_l = subtree_bounds.clone()
+        bounds_h = subtree_bounds.clone()
         j = node.disc
 
         bounds_l[j].upper = node.keys[j]  # current node is j-upper bound for LOSON
@@ -76,15 +67,3 @@ class KDTree:
         right = self._region_search(node.hison, rectangle, bounds_h)
 
         return found + left + right
-
-    def _in_region(self, node, region):
-        for i in range(self.dimension):
-            if node.keys[i] < region[i].lower or region[i].upper < node.keys[i]:
-                return False
-        return True
-
-    def _bounds_intersect_region(self, bounds, region):
-        for i in range(self.dimension):
-            if bounds[i].lower > region[i].upper or bounds[i].upper < region[i].lower:
-                return False
-        return True
