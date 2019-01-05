@@ -9,24 +9,32 @@ class BinSearchTree:
         if not isinstance(dimension, int) or dimension < 1:
             raise ValueError("Dimension must be a positive integer")
 
+        if dimension > Node.MAX_KEY_DIMENSION:
+            raise ValueError("Maximum allowed dimension for node keys: {}".format(Node.MAX_KEY_DIMENSION))
+
         self.dimension = dimension
         self._root = None
         self._current_bounds = None
 
-    def set_root(self, node: Node):
-        self._root = node
-        self._root.disc = 0
-        self._root.hison = None
-        self._root.loson = None
-        self._current_bounds = Region.from_node(node)
-
     def insert(self, node: Node) -> Optional[Node]:
+        """Insert a node into the tree
+
+        :param node: a Node having the same number of keys of the Tree
+        :return: if the given node is already in the tree the method returns it, None otherwise
+        """
+        if len(node.keys) != self.dimension:
+            raise ValueError("Node must have the same number of keys of the tree")
+
         if self._root is None:
-            self.set_root(node)
-            return
+            # setting the given node as root of the tree
+            self._root = node
+            self._root.disc = 0
+            self._root.hison = None
+            self._root.loson = None
+            self._current_bounds = Region.from_node(node)
+            return None
 
         parent = None
-        side = None
         son = self._root
 
         while son is not None:
@@ -35,20 +43,25 @@ class BinSearchTree:
 
             # Move down
             parent = son
-            son, side = son.successor(node)
+            son, _ = parent.successor(node)
 
-        # Found leaf where to insert new node
-        parent.add_son(node, side, self.dimension)
+        # Found a leaf where to insert new node
+        parent.add_son(node)
         self._current_bounds.resize_to_contain_node(node)
-        return
+        return None
 
-    def region_search(self, rectangle) -> List[Node]:
+    def regional_search(self, rectangle) -> List[Node]:
+        """Searches and returns all the nodes in the tree that fall within an (n-dimensional) rectangle given as input
+
+        :param rectangle: n-dimensional Region passed as
+        :return: list of nodes found the given region
+        """
         if len(rectangle) != 2 * self.dimension:
             raise ValueError("Invalid bound array")
 
-        return self._region_search(self._root, Region.from_bounds_array(rectangle), self._current_bounds)
+        return self.__regional_search(self._root, Region.from_bounds_array(rectangle), self._current_bounds)
 
-    def _region_search(self, node: Node, rectangle: Region, subtree_bounds: Region) -> List[Node]:
+    def __regional_search(self, node: Node, rectangle: Region, subtree_bounds: Region) -> List[Node]:
         if node is None or not rectangle.intersects_region(subtree_bounds):
             return []
 
@@ -63,7 +76,7 @@ class BinSearchTree:
         bounds_l[j].upper = node.keys[j]  # current node is j-upper bound for LOSON
         bounds_h[j].lower = node.keys[j]  # current node is j-lower bound for HISON
 
-        left = self._region_search(node.loson, rectangle, bounds_l)
-        right = self._region_search(node.hison, rectangle, bounds_h)
+        left = self.__regional_search(node.loson, rectangle, bounds_l)
+        right = self.__regional_search(node.hison, rectangle, bounds_h)
 
         return found + left + right

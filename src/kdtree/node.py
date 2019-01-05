@@ -2,6 +2,7 @@ from typing import Tuple
 
 
 class Node:
+    MAX_KEY_DIMENSION = 100000
     LOSON = object()
     HISON = object()
 
@@ -19,10 +20,18 @@ class Node:
     def __repr__(self):
         return self.__str__()
 
-    def super_key(self, discriminator):
+    def super_key(self, discriminator: int):
+        if discriminator < 0 or discriminator > (len(self.keys) - 1):
+            raise ValueError("Invalid discriminator")
         return self.keys[discriminator:] + self.keys[:discriminator]
 
     def successor(self, q):
+        if not isinstance(q, Node):
+            raise TypeError("q must be an instance of Node")
+
+        if len(self.keys) != len(q.keys):
+            raise ValueError("nodes must have the same number of keys")
+
         j = self.disc
 
         if self.keys[j] > q.keys[j]:
@@ -35,14 +44,16 @@ class Node:
             return self.hison, self.HISON
         raise ValueError("Same node")
 
-    def add_son(self, node, side, dimension):
+    def add_son(self, node):
+        _, side = self.successor(node)
+
         if side is Node.LOSON:
             self.loson = node
         else:
             self.hison = node
 
-        node.disc = self._next_disc(dimension)
+        node.disc = self.__next_discriminator()
         node.loson = node.hison = None
 
-    def _next_disc(self, dimension):
-        return (self.disc + 1) % dimension
+    def __next_discriminator(self):
+        return (self.disc + 1) % len(self.keys)

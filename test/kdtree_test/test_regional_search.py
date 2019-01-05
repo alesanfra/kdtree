@@ -16,13 +16,13 @@ class TestRegionalSearch(TestCase):
         self.tree.insert(Node(keys=(10, 60)))
 
     def test_search_one(self):
-        nodes = self.tree.region_search((69, 71, 84, 86))
+        nodes = self.tree.regional_search((69, 71, 84, 86))
 
         assert len(nodes) == 1
         assert nodes[0].keys == (70, 85)
 
     def test_search_all(self):
-        nodes = self.tree.region_search((0, 100, 0, 100))
+        nodes = self.tree.regional_search((0, 100, 0, 100))
 
         assert len(nodes) == 7
         assert nodes[0].keys == (50, 50)
@@ -30,14 +30,14 @@ class TestRegionalSearch(TestCase):
         assert nodes[2].keys == (25, 20)
 
     def test_search_two(self):
-        nodes = self.tree.region_search((40, 70, 70, 90))
+        nodes = self.tree.regional_search((40, 70, 70, 90))
 
         assert len(nodes) == 2
         assert nodes[0].keys == (40, 85)
         assert nodes[1].keys == (70, 85)
 
     def test_search_three(self):
-        nodes = self.tree.region_search((10, 40, 60, 85))
+        nodes = self.tree.regional_search((10, 40, 60, 85))
 
         assert len(nodes) == 3
         assert nodes[0].keys == (10, 70)
@@ -45,7 +45,7 @@ class TestRegionalSearch(TestCase):
         assert nodes[2].keys == (40, 85)
 
     def test_search_root(self):
-        nodes = self.tree.region_search((50, 50, 50, 50))
+        nodes = self.tree.regional_search((50, 50, 50, 50))
 
         assert len(nodes) == 1
         assert nodes[0].keys == (50, 50)
