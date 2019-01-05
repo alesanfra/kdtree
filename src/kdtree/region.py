@@ -1,5 +1,7 @@
 import copy
 
+from kdtree.node import Node
+
 
 class Bound:
     def __init__(self, lower, upper):
@@ -12,13 +14,13 @@ class Bound:
     def __repr__(self):
         return str((self.lower, self.upper))
 
-    def include(self, coordinate):
+    def extend_to_include_point(self, coordinate):
         self.lower = min(self.lower, coordinate)
         self.upper = max(self.upper, coordinate)
 
 
 class Region:
-    def __init__(self, bounds):
+    def __init__(self, *bounds):
         self._bounds = bounds
 
     def __contains__(self, item):
@@ -37,28 +39,47 @@ class Region:
     def __repr__(self):
         return str(self._bounds)
 
-    @classmethod
-    def from_bounds_array(cls, bounds_array):
-        return cls([Bound(bounds_array[i], bounds_array[i + 1]) for i in range(0, len(bounds_array), 2)])
+    @property
+    def dimension(self):
+        return len(self._bounds)
 
     @classmethod
-    def from_node(cls, node):
-        return cls([Bound(k, k) for k in node.keys])
+    def from_bounds_array(cls, *bounds_array):
+        if len(bounds_array) % 2 != 0:
+            raise ValueError("bounds_array must have an even number of elements")
+
+        return cls(*[Bound(bounds_array[i], bounds_array[i + 1]) for i in range(0, len(bounds_array), 2)])
+
+    @classmethod
+    def from_node(cls, node: Node):
+        if not isinstance(node, Node):
+            raise TypeError("node must be an instance of Node")
+
+        return cls(*[Bound(k, k) for k in node.keys])
 
     def clone(self):
         return copy.deepcopy(self)
 
-    def resize_to_contain_node(self, node):
-        for bound, coordinate in zip(self._bounds, node.keys):
-            bound.include(coordinate)
+    def resize_to_contain_node(self, node: Node):
+        if not isinstance(node, Node):
+            raise TypeError("node must be an instance of Node")
 
-    def contains_node(self, node):
+        for bound, coordinate in zip(self._bounds, node.keys):
+            bound.extend_to_include_point(coordinate)
+
+    def contains_node(self, node: Node):
+        if not isinstance(node, Node):
+            raise TypeError("node must be an instance of Node")
+
         for key, bound in zip(node.keys, self._bounds):
             if key < bound.lower or bound.upper < key:
                 return False
         return True
 
     def intersects_region(self, other_region):
+        if not isinstance(other_region, Region):
+            raise TypeError("other_region must be in instance of Region")
+
         for this_bound, other_bound in zip(self, other_region):
             if this_bound.lower > other_bound.upper or this_bound.upper < other_bound.lower:
                 return False

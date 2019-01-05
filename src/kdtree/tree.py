@@ -50,16 +50,19 @@ class BinSearchTree:
         self._current_bounds.resize_to_contain_node(node)
         return None
 
-    def regional_search(self, rectangle) -> List[Node]:
+    def regional_search(self, rectangle: Region) -> List[Node]:
         """Searches and returns all the nodes in the tree that fall within an (n-dimensional) rectangle given as input
 
         :param rectangle: n-dimensional Region passed as
         :return: list of nodes found the given region
         """
-        if len(rectangle) != 2 * self.dimension:
+        if not isinstance(rectangle, Region):
+            raise TypeError("rectangle must be an instance of Region")
+
+        if rectangle.dimension != self.dimension:
             raise ValueError("Invalid bound array")
 
-        return self.__regional_search(self._root, Region.from_bounds_array(rectangle), self._current_bounds)
+        return self.__regional_search(self._root, rectangle, self._current_bounds)
 
     def __regional_search(self, node: Node, rectangle: Region, subtree_bounds: Region) -> List[Node]:
         if node is None or not rectangle.intersects_region(subtree_bounds):
