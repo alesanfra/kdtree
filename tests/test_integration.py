@@ -1,10 +1,8 @@
-from kdtree.node import Node
-from kdtree.region import Region, Bound
-from kdtree.tree import BinSearchTree
+from kdtree import BinSearchTree, Bound, Node, Region
 
 
-def main():
-    # create a new tree with dimension 2
+def test_integration():
+    # create a new tree with dimension == 2
     tree = BinSearchTree(2)
 
     # insert nodes into the tree
@@ -18,18 +16,16 @@ def main():
 
     # create rectangle from a bound array as described in the article
     # element 2*j is lower bound and element (2*j)+1 is upper bound of dimension j
-    rectangle1 = Region.from_bounds_array(69, 71, 84, 86)
+    rectangle_1 = Region.from_bounds_array(69, 71, 84, 86)
 
-    # create rectanglse as a list of Bound object
-    rectangle2 = Region(Bound(69, 71), Bound(84, 86))
+    # create rectangles as a list of Bound object
+    rectangle_2 = Region(Bound(69, 71), Bound(84, 86))
 
     # Search
-    nodes = tree.regional_search(rectangle1)
+    nodes = tree.regional_search(rectangle_1)
     print("First search result {}".format(nodes))
 
-    nodes = tree.regional_search(rectangle2)
+    nodes = tree.regional_search(rectangle_2)
     print("Second search result {}".format(nodes))
 
 
-if __name__ == '__main__':
-    main()

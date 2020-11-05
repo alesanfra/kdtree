@@ -1,12 +1,13 @@
-from unittest import TestCase
+import pytest
 
-from kdtree.node import Node
-from kdtree.region import Region, Bound
+from kdtree import Bound, Node, Region
 
 
-class TestRegion(TestCase):
-    def setUp(self):
-        self.region = Region.from_bounds_array(1, 10, 1, 10)
+class TestRegion:
+
+    @pytest.fixture
+    def region(self):
+        return Region.from_bounds_array(1, 10, 1, 10)
 
     def test_create(self):
         region = Region(Bound(1, 10), Bound(2, 20))
@@ -31,7 +32,7 @@ class TestRegion(TestCase):
         assert region[1].upper == 20
 
     def test_create_from_bounds_array_odd(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             Region.from_bounds_array(1, 10, 2)
 
     def test_create_from_node(self):
@@ -48,25 +49,25 @@ class TestRegion(TestCase):
         assert region[2].lower == 4
         assert region[2].upper == 4
 
-    def test_resize_to_contain_node(self):
-        assert self.region[0].upper == 10
-        assert self.region[1].upper == 10
+    def test_resize_to_contain_node(self, region):
+        assert region[0].upper == 10
+        assert region[1].upper == 10
 
-        self.region.resize_to_contain_node(Node((12, 13)))
+        region.resize_to_contain_node(Node((12, 13)))
 
-        assert self.region[0].upper == 12
-        assert self.region[1].upper == 13
+        assert region[0].upper == 12
+        assert region[1].upper == 13
 
-    def test_contains_node(self):
-        assert self.region.contains_node(Node((12, 13))) is False
-        assert self.region.contains_node(Node((9, 9))) is True
+    def test_contains_node(self, region):
+        assert region.contains_node(Node((12, 13))) is False
+        assert region.contains_node(Node((9, 9))) is True
 
-    def test_intersects_region(self):
+    def test_intersects_region(self, region):
         r = Region.from_bounds_array(2, 4, 9, 13)
 
-        assert self.region.intersects_region(r) is True
+        assert region.intersects_region(r) is True
 
-    def test_not_intersects_region(self):
+    def test_not_intersects_region(self, region):
         r = Region.from_bounds_array(2, 4, 11, 13)
 
-        assert self.region.intersects_region(r) is False
+        assert region.intersects_region(r) is False

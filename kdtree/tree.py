@@ -1,7 +1,7 @@
-from typing import Optional, List
+from typing import List, Optional
 
-from kdtree.node import Node
-from kdtree.region import Region
+from .node import Node
+from .region import Region
 
 
 class BinSearchTree:

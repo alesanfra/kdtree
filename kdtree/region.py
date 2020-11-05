@@ -1,6 +1,6 @@
 import copy
 
-from kdtree.node import Node
+from .node import Node
 
 
 class Bound:

@@ -1,11 +1,11 @@
 from random import randint
-from unittest import TestCase
 
-from kdtree.node import Node
-from kdtree.tree import BinSearchTree
+import pytest
+
+from kdtree import BinSearchTree, Node
 
 
-class TestInsertNode(TestCase):
+class TestInsertNode:
     def test_insert_empty(self):
         tree = BinSearchTree(2)
         node = Node(keys=(1, 2))
@@ -38,7 +38,7 @@ class TestInsertNode(TestCase):
         tree = BinSearchTree(3)
         node1 = Node(keys=(50, 50))
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             tree.insert(node1)
 
     def test_insert_100_dimension_nodes(self):
