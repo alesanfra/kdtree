@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/alesanfra/kdtree.svg?branch=main)](https://travis-ci.com/alesanfra/kdtree)
+[![Build Status](https://travis-ci.com/alesanfra/kdtree.svg?branch=master)](https://travis-ci.com/alesanfra/kdtree)
 
 # KDTree
 
