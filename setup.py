@@ -8,9 +8,9 @@ with open(project_dir / "README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="kdtree",
+    name="kdtree-python",
     packages=["kdtree"],
-    version="1.0.0",
+    version="0.1.0",
     description="Implementation of a multidimensional binary search tree for associative searching",
     author="Alessio Sanfratello",
     url="https://github.com/alesanfra/kdtree",
