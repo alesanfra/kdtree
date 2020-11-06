@@ -10,7 +10,7 @@ with open(project_dir / "README.md", encoding="utf-8") as f:
 setup(
     name="kdtree-python",
     packages=["kdtree"],
-    version="0.1.1",
+    version="0.1.2",
     description="Implementation of a multidimensional binary search tree for associative searching",
     author="Alessio Sanfratello",
     url="https://github.com/alesanfra/kdtree",
