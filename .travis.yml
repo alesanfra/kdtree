@@ -2,8 +2,14 @@ language: python
 python:
   - "3.9"
 
+install:
+  - pip install pytest-cov
+
 script:
-  - python -m pytest tests/
+  - python -m pytest --cov=kdtree tests/
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
