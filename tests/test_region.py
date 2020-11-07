@@ -4,7 +4,6 @@ from kdtree import Bound, Node, Region
 
 
 class TestRegion:
-
     @pytest.fixture
     def region(self):
         return Region.from_bounds_array(1, 10, 1, 10)

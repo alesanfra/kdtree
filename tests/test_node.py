@@ -1,25 +1,24 @@
 import pytest
 
-from kdtree import Node
+from kdtree import Node, NodeSide
 
 
 class TestNode:
-    
     @pytest.fixture
     def node(self):
-        return Node((20, 30, 40, 50), disc=0)
+        return Node((20, 30, 40, 50), discriminator=0)
 
     def test_create_only_key(self):
         node = Node((1, 2, 3, 4))
 
         assert node.keys == (1, 2, 3, 4)
-        assert node.disc is None
+        assert node.discriminator is None
         assert node.loson is None
         assert node.hison is None
 
     def test_create_fail(self):
         with pytest.raises(TypeError):
-            Node('a string')
+            Node("a string")
 
     def test_super_key(self, node):
         assert node.super_key(0) == (20, 30, 40, 50)
@@ -41,7 +40,7 @@ class TestNode:
         successor, side = node.successor(q)
 
         assert successor is None
-        assert side is Node.LOSON
+        assert side is NodeSide.LOSON
 
     def test_successor_loson_equal(self, node):
         q = Node((20, 1, 1, 1))
@@ -49,7 +48,7 @@ class TestNode:
         successor, side = node.successor(q)
 
         assert successor is None
-        assert side is Node.LOSON
+        assert side is NodeSide.LOSON
 
     def test_successor_hison(self, node):
         q = Node((21, 1, 1, 1))
@@ -57,7 +56,7 @@ class TestNode:
         successor, side = node.successor(q)
 
         assert successor is None
-        assert side is Node.HISON
+        assert side is NodeSide.HISON
 
     def test_successor_fail_different_dimensions(self, node):
         q = Node((21, 1))
@@ -67,7 +66,7 @@ class TestNode:
 
     def test_successor_fail_not_a_node(self, node):
         with pytest.raises(TypeError):
-            node.successor('not a node')
+            node.successor("not a node")
 
     def test_add_son_loson(self, node):
         q = Node((17, 1, 1, 1))
@@ -91,4 +90,4 @@ class TestNode:
 
     def test_add_son_fail_not_a_node(self, node):
         with pytest.raises(TypeError):
-            node.add_son('not a node')
+            node.add_son("not a node")

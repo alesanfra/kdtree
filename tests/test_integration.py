@@ -27,5 +27,3 @@ def test_integration():
 
     nodes = tree.regional_search(rectangle_2)
     print("Second search result {}".format(nodes))
-
-

@@ -4,7 +4,6 @@ from kdtree import BinSearchTree, Node, Region
 
 
 class TestRegionalSearch:
-
     @pytest.fixture
     def tree(self):
         tree = BinSearchTree(2)
@@ -58,4 +57,4 @@ class TestRegionalSearch:
 
     def test_search_fail_not_a_region(self, tree):
         with pytest.raises(TypeError):
-            tree.regional_search('not a region')
+            tree.regional_search("not a region")

@@ -28,7 +28,7 @@ class BinSearchTree:
         if self._root is None:
             # setting the given node as root of the tree
             self._root = node
-            self._root.disc = 0
+            self._root.discriminator = 0
             self._root.hison = None
             self._root.loson = None
             self._current_bounds = Region.from_node(node)
@@ -74,7 +74,7 @@ class BinSearchTree:
 
         bounds_l = subtree_bounds.clone()
         bounds_h = subtree_bounds.clone()
-        j = node.disc
+        j = node.discriminator
 
         bounds_l[j].upper = node.keys[j]  # current node is j-upper bound for LOSON
         bounds_h[j].lower = node.keys[j]  # current node is j-lower bound for HISON

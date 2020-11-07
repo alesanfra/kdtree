@@ -52,8 +52,7 @@ class Region:
 
     @classmethod
     def from_node(cls, node: Node):
-        if not isinstance(node, Node):
-            raise TypeError("node must be an instance of Node")
+        cls._check_node_type(node)
 
         return cls(*[Bound(k, k) for k in node.keys])
 
@@ -61,15 +60,13 @@ class Region:
         return copy.deepcopy(self)
 
     def resize_to_contain_node(self, node: Node):
-        if not isinstance(node, Node):
-            raise TypeError("node must be an instance of Node")
+        self._check_node_type(node)
 
         for bound, coordinate in zip(self._bounds, node.keys):
             bound.extend_to_include_point(coordinate)
 
     def contains_node(self, node: Node):
-        if not isinstance(node, Node):
-            raise TypeError("node must be an instance of Node")
+        self._check_node_type(node)
 
         for key, bound in zip(node.keys, self._bounds):
             if key < bound.lower or bound.upper < key:
@@ -84,3 +81,8 @@ class Region:
             if this_bound.lower > other_bound.upper or this_bound.upper < other_bound.lower:
                 return False
         return True
+
+    @classmethod
+    def _check_node_type(cls, node):
+        if not isinstance(node, Node):
+            raise TypeError("node must be an instance of Node")

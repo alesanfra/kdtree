@@ -15,7 +15,7 @@ class TestInsertNode:
         assert r is None
         assert tree._root is node
         assert tree._root.super_key(0) == node.super_key(0)
-        assert node.disc == 0
+        assert node.discriminator == 0
         assert node.loson is None
         assert node.hison is None
 
@@ -30,7 +30,7 @@ class TestInsertNode:
         assert r is None
         assert tree._root is node1
         assert tree._root.loson is node2
-        assert node2.disc == 1
+        assert node2.discriminator == 1
         assert node2.loson is None
         assert node2.hison is None
 
@@ -49,7 +49,7 @@ class TestInsertNode:
         r = tree.insert(node1)
         assert r is None
         assert tree._root is node1
-        assert node1.disc == 0
+        assert node1.discriminator == 0
         assert node1.loson is None
         assert node1.hison is None
 
@@ -57,7 +57,7 @@ class TestInsertNode:
         assert r is None
         assert tree._root is node1
         assert tree._root.hison is node2
-        assert node2.disc == 1
+        assert node2.discriminator == 1
         assert node2.loson is None
         assert node2.hison is None
 
@@ -65,7 +65,7 @@ class TestInsertNode:
         tree = BinSearchTree(3)
         nodes = []
 
-        for i in range(1000):
+        for _ in range(1000):
             keys = randint(-10000, 10000), randint(-10000, 10000), randint(-10000, 10000)
             node = Node(keys=keys)
             nodes.append(node)
@@ -81,7 +81,7 @@ class TestInsertNode:
         r = tree.insert(node1)
         assert r is None
         assert tree._root is node1
-        assert node1.disc == 0
+        assert node1.discriminator == 0
         assert node1.loson is None
         assert node1.hison is None
 
@@ -89,6 +89,6 @@ class TestInsertNode:
         assert r is None
         assert tree._root is node1
         assert tree._root.hison is node2
-        assert node2.disc == 1
+        assert node2.discriminator == 1
         assert node2.loson is None
         assert node2.hison is None

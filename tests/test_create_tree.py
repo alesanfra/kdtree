@@ -4,7 +4,6 @@ from kdtree import BinSearchTree
 
 
 class TestCreateTree:
-
     @pytest.mark.parametrize("dimension", [1, 2, 100000])
     def test_create_tree(self, dimension):
         tree = BinSearchTree(dimension)

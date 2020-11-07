@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/alesanfra/kdtree.svg?branch=master)](https://travis-ci.com/alesanfra/kdtree)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alesanfra_kdtree&metric=alert_status)](https://sonarcloud.io/dashboard?id=alesanfra_kdtree)
 
 # KDTree
 
