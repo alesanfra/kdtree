@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/alesanfra/kdtree.svg?branch=master)](https://travis-ci.com/alesanfra/kdtree)
+![Build](https://github.com/alesanfra/kdtree/workflows/Build%20and%20Test/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alesanfra_kdtree&metric=alert_status)](https://sonarcloud.io/dashboard?id=alesanfra_kdtree)
 [![codecov](https://codecov.io/gh/alesanfra/kdtree/branch/master/graph/badge.svg?token=GA5KCLADD6)](https://codecov.io/gh/alesanfra/kdtree)
 
